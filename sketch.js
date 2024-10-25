@@ -7,10 +7,15 @@ let r
 let g
 let b
 let bg
+let increment = 0.5
+ let rDirection = 1; 
+let gDirection = 1;
+let bDirection = 1;
 
 function setup() {
   createCanvas(400, 400)
   createRandomBGColor()
+  CreateBall()
   // ----------------------
   // Task 1 
   // All four of these function calls make the body of setup cleaner. 
@@ -19,32 +24,50 @@ function setup() {
   // Create a function called createBall that does all of these things.
   //   What parameters should it have, if any?
   // ----------------------
-  setRandomPosition()
+ function CreateBall() {
+    setRandomPosition()
   setRandomVelocity()
   radius = random(10,20)
   createRandomColor()
   noStroke()
+ }
   
 }
 
+
+
 function draw() {
-  background(bg)
+  background(bg);
+
+  r += increment * rDirection;
+  g += increment / 2 * gDirection;
+  b += increment / 3 * bDirection;
+
+  if (r >= 255 || r <= 0) {
+    rDirection *= -1;
+  }
+  if (g >= 255 || g <= 0) {
+    gDirection *= -1;
+  }
+  if (b >= 255 || b <= 0) {
+    bDirection *= -1;
+  }
+
+  fill(color(r, g, b));
+  circle(x, y, radius);
   fill(color(r,g,b))
   circle(x,y,radius)
   x += dx // x = x + dx
   y += dy // y = y + dy
-  if( x < 0 ) {
+  if( x < radius/2 || x> width - radius/2 ) {
     dx *= -1
   }
-  if( x > width ) {
-    dx *= -1 
-  }
-  if( y < 0 ) {
+ 
+  if( y < radius/2 || y> height - radius/2) {
     dy *= -1
   }
-  if( y > height ) {
-    dy *= -1
-  }   
+  
+   
   // ----------------------
   // Task 2
   // Remember that || means "or" and that && means "and"
@@ -84,19 +107,21 @@ function draw() {
 
 // Task 5
 // default parameter values. 
-// You can see when we call this function in setup, we don't pass any values in.
-// In that case, the defaults are used. 
+// You can see when we call this function in setup, we don't pass any values in. 
+// In that case, the defaults are used.
 // uncomment the following line and then update the body of the function to use
 //   xMin, xMax, yMin, and yMax in the random calls
 // Then, in setup, change the setRandomPosition call to specify where your ball
 //   should roughly be at the start. 
-// function setRandomPosition( xMin = 0, yMin = 0, xMax = width, yMax = height) {
-function setRandomPosition() {
-  x = random(width)
-  y = random(height)  
-}
+//function setRandomPosition( xMin = 0, yMin = 0, xMax = width, yMax = height)
 
-function setRandomVelocity() {
+function setRandomPosition(xMin = 0, yMin = 0, xMax = width, yMax = height) { 
+x = random(xMin,xMax); 
+  y = random(yMin,yMax)
+ }
+
+
+ function setRandomVelocity() {
   dx = random(-1,1)
   dy = random(-1,1)  
 }
@@ -115,8 +140,18 @@ function createRandomBGColor() {
 // Task 6
 // Create a new ball here also
 // ----------------------
+
+ function CreateBall() {
+    setRandomPosition()
+  setRandomVelocity()
+  radius = random(10,20)
+  createRandomColor()
+  noStroke()
+ }
+
 function keyPressed() {
   createRandomBGColor()
+  CreateBall()
 }
 
 /** 
